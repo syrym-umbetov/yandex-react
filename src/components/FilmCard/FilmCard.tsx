@@ -67,7 +67,7 @@ const FilmCard: FunctionComponent<FilmCardProps> = observer(({ id, title, poster
 export default FilmCard;
 
 interface FilmCardProps extends MovieType {
-  isBasket: boolean;
+  isBasket?: boolean;
 }
 
 const Modal = () => {};
