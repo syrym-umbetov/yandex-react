@@ -7,10 +7,10 @@ const Footer = () => {
   return (
     <footer className={footer}>
       <div className={title}>
-        <Link href='faq'>Вопросы-ответы</Link>
+        <Link href='/faq'>Вопросы-ответы</Link>
       </div>
       <div className={title}>
-        <Link href='about-us'>О нас</Link>
+        <Link href='/about-us'>О нас</Link>
       </div>
     </footer>
   );

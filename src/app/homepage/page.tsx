@@ -31,10 +31,10 @@ const Main = () => {
             <div>Название</div>
             <input placeholder='Введите название' />
           </div>
-          <div className={filter} id='sobaka'>
+          <div className={filter}>
             <div>Жанр</div>
             <input placeholder='Введите жанр' className={hasArrow} onClick={() => setOpenGenre(true)} />
-            {openGenre && createPortal(<div>qwejoqwje</div>, document.body)}
+            {/* {openGenre && createPortal(<div>qwejoqwje</div>, document.body)} */}
           </div>
           <div className={filter}>
             <div>Кинотеатр</div>

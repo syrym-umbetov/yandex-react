@@ -1,0 +1,14 @@
+.image {
+  border-radius: 8px;
+}
+
+.parent {
+  display: flex;
+  gap: 32px;
+}
+
+.flex {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
