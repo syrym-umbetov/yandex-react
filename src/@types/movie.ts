@@ -14,6 +14,7 @@ export type MovieType = {
   rating: number;
   director: string;
   reviewIds: string[];
+  count: number;
 };
 
 export type ReviewType = {

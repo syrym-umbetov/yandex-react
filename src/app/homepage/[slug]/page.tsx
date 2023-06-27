@@ -8,6 +8,7 @@ import { API } from "@/app/variables";
 import { MovieType, ReviewType } from "@/@types/movie";
 import Image from "next/image";
 import placeholder from "../../../assets/placeholder.png";
+import { renameGenres } from "@/utils/renameGenres";
 
 export default function Movie({ params }: { params: { slug: string } }) {
   const { wrapper, parent, title, description, image, reviewTitle } = styles;
@@ -39,8 +40,9 @@ export default function Movie({ params }: { params: { slug: string } }) {
           />
           <div>
             <div className={title}>{movie.title}</div>
+            <br />
             <div>
-              <b>Жанр:</b> {movie.genre}
+              <b>Жанр:</b> {renameGenres(movie.genre)}
             </div>
             <br />
             <div>

@@ -4,8 +4,7 @@
 
   display: flex;
   gap: 1.4375rem;
-
-  margin-top: 5.25rem;
+  min-height: 100vh;
 }
 
 .title {

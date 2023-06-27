@@ -6,9 +6,13 @@ import { useRouter } from "next/navigation";
 import styles from "./FimCard.module.css";
 import minus from "../../assets/minus.svg";
 import plus from "../../assets/plus.svg";
+import { renameGenres } from "@/utils/renameGenres";
+import { observer } from "mobx-react-lite";
+import global from "@/store/global";
 
-const FilmCard: FunctionComponent<FilmCardProps> = ({ id, title, posterUrl, genre }) => {
+const FilmCard: FunctionComponent<FilmCardProps> = observer(({ id, title, posterUrl, genre, count }) => {
   const { image, parent, flex } = styles;
+  const { setQuantity } = global;
   const router = useRouter();
   return (
     <Box width='100%'>
@@ -20,18 +24,30 @@ const FilmCard: FunctionComponent<FilmCardProps> = ({ id, title, posterUrl, genr
           <div className={flex}>
             <div onClick={() => router.push(`/homepage/${id}`)}>{title}</div>
             <div className={flex}>
-              <Image src={minus} alt='minus' />
-              <span>0</span>
-              <Image src={plus} alt='plus' />
+              <Image
+                src={minus}
+                alt='minus'
+                onClick={() => {
+                  setQuantity(id, "substract");
+                }}
+              />
+              <span>{count}</span>
+              <Image
+                src={plus}
+                alt='plus'
+                onClick={() => {
+                  setQuantity(id, "add");
+                }}
+              />
             </div>
           </div>
           <br />
-          <div>{genre}</div>
+          <div>{renameGenres(genre)}</div>
         </div>
       </div>
     </Box>
   );
-};
+});
 
 export default FilmCard;
 

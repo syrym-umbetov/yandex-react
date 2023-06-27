@@ -7,20 +7,33 @@ import axios from "axios";
 import { API } from "@/app/variables";
 import { MovieType } from "@/@types/movie";
 import { createPortal } from "react-dom";
+import global from "@/store/global";
+import { observer } from "mobx-react-lite";
+import Loader from "@/components/Loader/Loader";
 
-const Main = () => {
+const Main = observer(() => {
   const { wrapper, title, filter, hasArrow, moviesWrapper } = styles;
 
-  const [movies, setMovies] = useState<MovieType[]>([]);
+  const { movies, setMovies } = global;
+
+  const [loader, setLoader] = useState(false);
+
   useEffect(() => {
     const fetchingMovies = async () => {
+      setLoader(true);
       const { data } = await axios.get(API + "movies");
       setMovies(data);
+      setLoader(false);
     };
     fetchingMovies();
-  }, []);
+  }, [setMovies]);
 
   const [openGenre, setOpenGenre] = useState(false);
+
+  if (loader)
+    return (
+        <Loader />
+    );
 
   return (
     <div className={wrapper}>
@@ -52,6 +65,6 @@ const Main = () => {
       </div>
     </div>
   );
-};
+});
 
 export default Main;
