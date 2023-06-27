@@ -5,16 +5,15 @@ import styles from "./Main.module.css";
 import FilmCard from "@/components/FilmCard/FilmCard";
 import axios from "axios";
 import { API } from "@/app/variables";
-import { MovieType } from "@/@types/movie";
-import { createPortal } from "react-dom";
 import global from "@/store/global";
 import { observer } from "mobx-react-lite";
 import Loader from "@/components/Loader/Loader";
 
 const Main = observer(() => {
   const { wrapper, title, filter, hasArrow, moviesWrapper } = styles;
+  const [openGenre, setOpenGenre] = useState(false);
 
-  const { movies, setMovies } = global;
+  const { movies, setMovies, filterByName, filtered, setFilter, setName, name } = global;
 
   const [loader, setLoader] = useState(false);
 
@@ -27,14 +26,17 @@ const Main = observer(() => {
       }
       const { data } = await axios.get(API + "movies");
       setMovies(data);
+
+      setFilter(data);
       setLoader(false);
     };
     fetchingMovies();
-  }, []);
+  }, [setMovies, setFilter, filtered?.length, movies]);
 
-  const [openGenre, setOpenGenre] = useState(false);
-
-  if (loader) return <Loader />;
+  const handleFilterByName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
+    filterByName(event.target.value);
+  };
 
   return (
     <div className={wrapper}>
@@ -43,7 +45,7 @@ const Main = observer(() => {
           <div className={title}>Фильтр поиска</div>
           <div className={filter}>
             <div>Название</div>
-            <input placeholder='Введите название' />
+            <input value={name} placeholder='Введите название' onChange={handleFilterByName} />
           </div>
           <div className={filter}>
             <div>Жанр</div>
@@ -59,11 +61,15 @@ const Main = observer(() => {
 
       <div style={{ width: "35rem" }}></div>
 
-      <div className={moviesWrapper}>
-        {movies?.map((item) => (
-          <FilmCard key={item.id} {...item} />
-        ))}
-      </div>
+      {loader ? (
+        <Loader />
+      ) : (
+        <div className={moviesWrapper}>
+          {filtered?.map((item) => (
+            <FilmCard key={item.id} {...item} />
+          ))}
+        </div>
+      )}
     </div>
   );
 });

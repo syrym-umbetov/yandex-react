@@ -5,15 +5,17 @@ import { makePersistable } from "mobx-persist-store";
 
 class Global {
   movies: MovieType[] = [];
+  filtered: MovieType[] = [];
   basket: MovieType[] = [];
+  name: string = "";
 
   constructor() {
     makeAutoObservable(this);
 
     makePersistable(this, {
       name: "Store",
-      properties: ["movies", "basket"],
-      storage: window.localStorage,
+      properties: ["movies", "basket", "filtered", "name"],
+      storage: window.sessionStorage,
     });
   }
 
@@ -24,8 +26,19 @@ class Global {
     }));
   });
 
+  setFilter = action((movies: MovieType[]) => {
+    this.filtered = movies?.map((item) => ({
+      ...item,
+      count: 0,
+    }));
+  });
+
+  setName = action((name: string) => {
+    this.name = name;
+  });
+
   setQuantity = action((id: string, action: "add" | "substract") => {
-    this.movies = this.movies?.map((item) => {
+    this.filtered = this.movies?.map((item) => {
       if (id === item.id) {
         if (action === "add" && item.count === 30) {
           return item;
@@ -41,12 +54,16 @@ class Global {
       return item;
     });
 
-    this.basket = this.movies?.filter((item) => item.count);
+    this.basket = this.filtered?.filter((item) => item.count);
+  });
+
+  filterByName = action((input: string) => {
+    this.filtered = this.movies.filter((element) => element.title.toLowerCase().includes(input.toLowerCase()));
   });
 
   removeFromBasket = action((id: string) => {
     this.basket = this.basket?.filter((item) => item.id !== id);
-    this.movies = this.movies?.map((item) => {
+    this.movies = this.filtered?.map((item) => {
       if (item.id === id) {
         return { ...item, count: 0 };
       }
