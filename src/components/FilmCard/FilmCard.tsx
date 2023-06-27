@@ -6,14 +6,18 @@ import { useRouter } from "next/navigation";
 import styles from "./FimCard.module.css";
 import minus from "../../assets/minus.svg";
 import plus from "../../assets/plus.svg";
+import xmark from "../../assets/xmark.svg";
 import { renameGenres } from "@/utils/renameGenres";
 import { observer } from "mobx-react-lite";
 import global from "@/store/global";
 
-const FilmCard: FunctionComponent<FilmCardProps> = observer(({ id, title, posterUrl, genre, count }) => {
+const FilmCard: FunctionComponent<FilmCardProps> = observer(({ id, title, posterUrl, genre, count, isBasket }) => {
   const { image, parent, flex } = styles;
-  const { setQuantity } = global;
+  const { setQuantity, removeFromBasket } = global;
   const router = useRouter();
+
+  // const [modal, setModal] = useState(true)
+
   return (
     <Box width='100%'>
       <div className={parent}>
@@ -31,7 +35,7 @@ const FilmCard: FunctionComponent<FilmCardProps> = observer(({ id, title, poster
                   setQuantity(id, "substract");
                 }}
               />
-              <span>{count}</span>
+              <span style={{ margin: "0 5px" }}>{count}</span>
               <Image
                 src={plus}
                 alt='plus'
@@ -39,6 +43,17 @@ const FilmCard: FunctionComponent<FilmCardProps> = observer(({ id, title, poster
                   setQuantity(id, "add");
                 }}
               />
+              {isBasket && (
+                <Image
+                  src={xmark}
+                  alt='xmark'
+                  onClick={() => {
+                    // setModal(true);
+                    removeFromBasket(id);
+                  }}
+                />
+              )}
+              {/* {modal && <Modal></Modal>} */}
             </div>
           </div>
           <br />
@@ -51,4 +66,8 @@ const FilmCard: FunctionComponent<FilmCardProps> = observer(({ id, title, poster
 
 export default FilmCard;
 
-interface FilmCardProps extends MovieType {}
+interface FilmCardProps extends MovieType {
+  isBasket: boolean;
+}
+
+const Modal = () => {};

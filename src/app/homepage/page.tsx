@@ -21,19 +21,20 @@ const Main = observer(() => {
   useEffect(() => {
     const fetchingMovies = async () => {
       setLoader(true);
+      if (movies?.length !== 0) {
+        setLoader(false);
+        return movies;
+      }
       const { data } = await axios.get(API + "movies");
       setMovies(data);
       setLoader(false);
     };
     fetchingMovies();
-  }, [setMovies]);
+  }, []);
 
   const [openGenre, setOpenGenre] = useState(false);
 
-  if (loader)
-    return (
-        <Loader />
-    );
+  if (loader) return <Loader />;
 
   return (
     <div className={wrapper}>
